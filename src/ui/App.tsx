@@ -123,26 +123,38 @@ export function App() {
                 <div class="track" key={tr.label}>
                   <div class="trackLabel" style={{ background: tr.color }} title={`Track ${tr.label}`}>{tr.label}</div>
                   <div class="trackLine" onDragOver={onTrackDragOver as any} onDrop={(e) => onTrackDrop(tIdx, e as any)}>
+                    {/* Cars on the track, left-to-right */}
                     {tr.cars.map((car, cIdx) => (
                       <div class="car" title={`Car to ${car.target}`} style={{ background: colorFor(state, car.target) }} onClick={() => doMoveFromSiding(tIdx, cIdx)}>
                         {car.target}
                       </div>
+                    ))}
+                    {/* Empty slots to reach fixed length */}
+                    {Array.from({ length: Math.max(0, state.maxCars - tr.cars.length) }).map(() => (
+                      <div class="car empty" aria-hidden="true" />
                     ))}
                     {flash?.startsWith(`siding-${tIdx}`) && <div class="rejection">!</div>}
                   </div>
                 </div>
               ))}
             </div>
+            <div class="divider" aria-hidden="true" />
             <div class="head">
-              <div class="loco" title="Shunting locomotive" />
               <div class="headCars">
+                {/* Head shunt cars left-to-right */}
                 {state.head.map((car, i) => (
                   <div class="car small" draggable title={`Car to ${car.target}: click to send to ${car.target}, or drag left block to a track`} onDragStart={(e) => onHeadDragStart(i, e as any)} onClick={() => doMoveFromHeadToDest(i)} style={{ background: colorFor(state, car.target) }}>
                     {car.target}
                   </div>
                 ))}
+                {/* Empty slots for head to reach fixed length */}
+                {Array.from({ length: Math.max(0, state.maxCars - state.head.length) }).map(() => (
+                  <div class="car small empty" aria-hidden="true" />
+                ))}
                 {flash?.startsWith('head') && <div class="rejection">!</div>}
               </div>
+              {/* Loco should always be at the right side */}
+              <div class="loco" title="Shunting locomotive" />
             </div>
           </div>
         </div>
