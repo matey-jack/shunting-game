@@ -1,7 +1,7 @@
 export const defaultLevelsText = `maxCars: 5
 A: bcabc
 B: bcdd
-C: ddd
+C: dd
 D: abcd
 ---
 maxCars: 3
