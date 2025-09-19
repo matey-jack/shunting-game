@@ -33,3 +33,7 @@ button{background:#1a1a1a;color:var(--fg);border:1px solid #333;border-radius:6p
 button:hover{border-color:#555}
 select{background:#0b0b0b;color:var(--fg);border:1px solid #333;border-radius:6px;padding:6px 8px}
 .muted{color:var(--muted)}
+
+/* Celebration wiggle when level solved */
+@keyframes wiggle{0%{transform:rotate(0)}20%{transform:rotate(2deg)}50%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}100%{transform:rotate(0)}}
+.celebrate .car{animation:wiggle .6s ease-in-out 3}

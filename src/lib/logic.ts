@@ -76,5 +76,7 @@ export function countNowIncorrect(state: YardState): number {
       if (car.target === tr.label) correctlyPlaced++
     }
   }
+  // Cars on the head shunt are, by definition, not yet on their destination track
+  total += state.head.length
   return total - correctlyPlaced
 }

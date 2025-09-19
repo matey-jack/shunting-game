@@ -38,6 +38,7 @@ export function App() {
   const [levelIndex, setLevelIndex] = useState(0)
   const [state, setState] = useState<YardState>(() => buildInitialState(parseLevels(defaultLevelsText)[0]))
   const [flash, setFlash] = useState<string | null>(null)
+  const [celebrating, setCelebrating] = useState(false)
   const audio = useAudio()
 
   useEffect(() => {
@@ -107,8 +108,27 @@ export function App() {
   const correct = countNowCorrect(state)
   const incorrect = countNowIncorrect(state)
 
+  // Celebrate and prompt when solved (remaining == 0)
+  useEffect(() => {
+    if (incorrect === 0) {
+      setCelebrating(true)
+      const timer = setTimeout(() => {
+        setCelebrating(false)
+        const goNext = window.confirm('Level solved! OK = Next level, Cancel = Retry this level')
+        if (goNext) {
+          const nextIndex = Math.min(levelIndex + 1, levels.length - 1)
+          setLevelIndex(nextIndex)
+          setState(buildInitialState(levels[nextIndex]))
+        } else {
+          setState(buildInitialState(levels[levelIndex]))
+        }
+      }, 900)
+      return () => clearTimeout(timer)
+    }
+  }, [incorrect])
+
   return (
-    <div>
+    <div class={celebrating ? 'celebrate' : undefined}>
       <div class="statusbar">
         <div class="pill">Steps: <b>{state.steps}</b></div>
         <div class="pill">Cars correctly placed: <b>{correct}</b></div>
