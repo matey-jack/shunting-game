@@ -39,6 +39,7 @@ export function App() {
   const [state, setState] = useState<YardState>(() => buildInitialState(parseLevels(defaultLevelsText)[0]))
   const [flash, setFlash] = useState<string | null>(null)
   const [celebrating, setCelebrating] = useState(false)
+  const [showSolvedDialog, setShowSolvedDialog] = useState(false)
   const audio = useAudio()
 
   useEffect(() => {
@@ -108,22 +109,11 @@ export function App() {
   const correct = countNowCorrect(state)
   const incorrect = countNowIncorrect(state)
 
-  // Celebrate and prompt when solved (remaining == 0)
+  // Celebrate and show dialog when solved (remaining == 0)
   useEffect(() => {
     if (incorrect === 0) {
       setCelebrating(true)
-      const timer = setTimeout(() => {
-        setCelebrating(false)
-        const goNext = window.confirm('Level solved! OK = Next level, Cancel = Retry this level')
-        if (goNext) {
-          const nextIndex = Math.min(levelIndex + 1, levels.length - 1)
-          setLevelIndex(nextIndex)
-          setState(buildInitialState(levels[nextIndex]))
-        } else {
-          setState(buildInitialState(levels[levelIndex]))
-        }
-      }, 900)
-      return () => clearTimeout(timer)
+      setShowSolvedDialog(true)
     }
   }, [incorrect])
 
@@ -198,6 +188,22 @@ export function App() {
             onLevelsTextChange={setLevelsText}
           />
         </div>
+        {showSolvedDialog && (
+          <SolvedDialog
+            onNext={() => {
+              const nextIndex = Math.min(levelIndex + 1, levels.length - 1)
+              setLevelIndex(nextIndex)
+              setState(buildInitialState(levels[nextIndex]))
+              setCelebrating(false)
+              setShowSolvedDialog(false)
+            }}
+            onRetry={() => {
+              setState(buildInitialState(levels[levelIndex]))
+              setCelebrating(false)
+              setShowSolvedDialog(false)
+            }}
+          />
+        )}
       </div>
     </div>
   )
@@ -236,6 +242,20 @@ function Controls(props: {
         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
           <button onClick={() => onApplyLevels(levelsText)}>Apply Levels</button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function SolvedDialog(props: { onNext: () => void; onRetry: () => void }) {
+  const { onNext, onRetry } = props
+  return (
+    <div class="solvedDialog" role="dialog" aria-labelledby="solved-title" aria-modal="false">
+      <h3 id="solved-title">Level solved!</h3>
+      <div class="muted">Great job. Choose what to do next:</div>
+      <div class="actions" style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+        <button onClick={onNext} autoFocus>Next level</button>
+        <button onClick={onRetry}>Retry this level</button>
       </div>
     </div>
   )

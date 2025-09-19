@@ -33,7 +33,42 @@ button{background:#1a1a1a;color:var(--fg);border:1px solid #333;border-radius:6p
 button:hover{border-color:#555}
 select{background:#0b0b0b;color:var(--fg);border:1px solid #333;border-radius:6px;padding:6px 8px}
 .muted{color:var(--muted)}
+.solvedDialog{margin-top:12px;padding:12px;background:#181818;border:1px solid #333;border-radius:8px}
+.solvedDialog h3{margin:0 0 6px 0}
 
-/* Celebration wiggle when level solved */
-@keyframes wiggle{0%{transform:rotate(0)}20%{transform:rotate(2deg)}50%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}100%{transform:rotate(0)}}
-.celebrate .car{animation:wiggle .6s ease-in-out 3}
+/* Celebration wave when level solved: gentle vertical bob with staggered phase */
+@keyframes waveY{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+.celebrate .car:not(.empty){animation:waveY 1.2s ease-in-out infinite}
+/* Stagger the wave along each row and the head shunt */
+.celebrate .trackLine .car:nth-child(1),
+.celebrate .headCars .car:nth-child(1){animation-delay:0s}
+.celebrate .trackLine .car:nth-child(2),
+.celebrate .headCars .car:nth-child(2){animation-delay:.08s}
+.celebrate .trackLine .car:nth-child(3),
+.celebrate .headCars .car:nth-child(3){animation-delay:.16s}
+.celebrate .trackLine .car:nth-child(4),
+.celebrate .headCars .car:nth-child(4){animation-delay:.24s}
+.celebrate .trackLine .car:nth-child(5),
+.celebrate .headCars .car:nth-child(5){animation-delay:.32s}
+.celebrate .trackLine .car:nth-child(6),
+.celebrate .headCars .car:nth-child(6){animation-delay:.40s}
+.celebrate .trackLine .car:nth-child(7),
+.celebrate .headCars .car:nth-child(7){animation-delay:.48s}
+.celebrate .trackLine .car:nth-child(8),
+.celebrate .headCars .car:nth-child(8){animation-delay:.56s}
+.celebrate .trackLine .car:nth-child(9),
+.celebrate .headCars .car:nth-child(9){animation-delay:.64s}
+.celebrate .trackLine .car:nth-child(10),
+.celebrate .headCars .car:nth-child(10){animation-delay:.72s}
+.celebrate .trackLine .car:nth-child(11),
+.celebrate .headCars .car:nth-child(11){animation-delay:.80s}
+.celebrate .trackLine .car:nth-child(12),
+.celebrate .headCars .car:nth-child(12){animation-delay:.88s}
+.celebrate .trackLine .car:nth-child(13),
+.celebrate .headCars .car:nth-child(13){animation-delay:.96s}
+.celebrate .trackLine .car:nth-child(14),
+.celebrate .headCars .car:nth-child(14){animation-delay:1.04s}
+.celebrate .trackLine .car:nth-child(15),
+.celebrate .headCars .car:nth-child(15){animation-delay:1.12s}
+.celebrate .trackLine .car:nth-child(16),
+.celebrate .headCars .car:nth-child(16){animation-delay:1.20s}
